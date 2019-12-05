@@ -36,25 +36,23 @@ template<class x,class y>redBlack<x,y>* left(redBlack<x,y> *node)
 {
     if(node==nullptr)
         return nullptr;
-    redBlack<x,y> *temp=node;
-    node=node->right;
-    temp->right=node->left;
-    node->left=temp;
-    node->color=temp->color;
-    node->left->color="red";
-    return node;
+    redBlack<x,y> *temp=node->right;
+    node->right=temp->left;
+    temp->left=node;
+    temp->color=node->color;
+    node->color="red";
+    return temp;
 }
 template<class x,class y>redBlack<x,y>* right(redBlack<x,y> *node)
 {
     if(node==nullptr)
         return nullptr;
-    redBlack<x,y> *temp=node;
-    node=node->left;
-    temp->left=node->right;
-    node->right=temp;
-    node->color=temp->color;
-    node->right->color="red";
-    return node;
+    redBlack<x,y> *temp=node->left;
+    node->left=temp->right;
+    temp->right=node;
+    temp->color=node->color;
+    node->color="red";
+    return temp;
 }
 template<class x,class y>bool isRed(redBlack<x,y> *node)
 {
@@ -65,16 +63,16 @@ template<class x,class y>bool isRed(redBlack<x,y> *node)
         else
             return false;
 }
-template<class x,class y>redBlack<x,y>* insert(redBlack<x,y> *node,x a,y b)
+template<class x,class y>redBlack<x,y>* insert(redBlack<x,y> *node,x a,y b)// it is a very complex function to understand
 {
-    if(node==nullptr)
+    if(node==nullptr)//initial checking if the node is null or not
     {
         return new redBlack<x,y>(a,b);
     }
     if(a<node->key)
     {
-        node->left=insert(node->left,a,b);
-    }
+        node->left=insert(node->left,a,b);//this assignment makes the modified node to get at proper place
+    }                                     //meaning when recursion happens the node is modified sometime and this changes are reflected here
     else if(a>node->key)
     {
         node->right=insert(node->right,a,b);
@@ -84,7 +82,7 @@ template<class x,class y>redBlack<x,y>* insert(redBlack<x,y> *node,x a,y b)
         node->value=b;
     }
     using::isRed;
-    if(isRed(node->right)&&!isRed(node->left))//this whole thing is a doubt
+    if(isRed(node->right)&&!isRed(node->left))
         node=left<x,y>(node);
     if(isRed(node->left)&&isRed(node->left->left))
         node=right<x,y>(node);
